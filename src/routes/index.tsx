@@ -1,118 +1,237 @@
 import { createFileRoute } from '@tanstack/react-router'
-import {
-  Zap,
-  Server,
-  Route as RouteIcon,
-  Shield,
-  Waves,
-  Sparkles,
-} from 'lucide-react'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { Badge } from "@/components/ui/badge"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Progress } from "@/components/ui/progress"
+import { Separator } from "@/components/ui/separator"
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from "recharts"
+import MainLayout from '@/components/layout/MainLayout'
 
-export const Route = createFileRoute('/')({ component: App })
+export const Route = createFileRoute('/')({ component: Dashboard })
 
-function App() {
-  const features = [
-    {
-      icon: <Zap className="w-12 h-12 text-cyan-400" />,
-      title: 'Powerful Server Functions',
-      description:
-        'Write server-side code that seamlessly integrates with your client components. Type-safe, secure, and simple.',
-    },
-    {
-      icon: <Server className="w-12 h-12 text-cyan-400" />,
-      title: 'Flexible Server Side Rendering',
-      description:
-        'Full-document SSR, streaming, and progressive enhancement out of the box. Control exactly what renders where.',
-    },
-    {
-      icon: <RouteIcon className="w-12 h-12 text-cyan-400" />,
-      title: 'API Routes',
-      description:
-        'Build type-safe API endpoints alongside your application. No separate backend needed.',
-    },
-    {
-      icon: <Shield className="w-12 h-12 text-cyan-400" />,
-      title: 'Strongly Typed Everything',
-      description:
-        'End-to-end type safety from server to client. Catch errors before they reach production.',
-    },
-    {
-      icon: <Waves className="w-12 h-12 text-cyan-400" />,
-      title: 'Full Streaming Support',
-      description:
-        'Stream data from server to client progressively. Perfect for AI applications and real-time updates.',
-    },
-    {
-      icon: <Sparkles className="w-12 h-12 text-cyan-400" />,
-      title: 'Next Generation Ready',
-      description:
-        'Built from the ground up for modern web applications. Deploy anywhere JavaScript runs.',
-    },
-  ]
+// 模拟数据
+const revenueData = [
+  { month: "1月", revenue: 4000, users: 240 },
+  { month: "2月", revenue: 3000, users: 198 },
+  { month: "3月", revenue: 2000, users: 170 },
+  { month: "4月", revenue: 2780, users: 230 },
+  { month: "5月", revenue: 1890, users: 210 },
+  { month: "6月", revenue: 2390, users: 250 },
+  { month: "7月", revenue: 3490, users: 320 },
+]
 
+const recentTransactions = [
+  { id: "1", customer: "张三", email: "zhangsan@example.com", amount: "¥2,400", status: "已完成", date: "2024-01-15" },
+  { id: "2", customer: "李四", email: "lisi@example.com", amount: "¥1,200", status: "处理中", date: "2024-01-14" },
+  { id: "3", customer: "王五", email: "wangwu@example.com", amount: "¥3,600", status: "已完成", date: "2024-01-13" },
+  { id: "4", customer: "赵六", email: "zhaoliu@example.com", amount: "¥800", status: "待处理", date: "2024-01-12" },
+  { id: "5", customer: "陈七", email: "chenqi@example.com", amount: "¥5,200", status: "已完成", date: "2024-01-11" },
+]
+
+const stats = [
+  { title: "总收入", value: "¥18,590", change: "+12.5%", trend: "up" },
+  { title: "总用户", value: "1,618", change: "+8.2%", trend: "up" },
+  { title: "订单数", value: "248", change: "-2.4%", trend: "down" },
+  { title: "转化率", value: "3.2%", change: "+1.1%", trend: "up" },
+]
+
+function Dashboard() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900">
-      <section className="relative py-20 px-6 text-center overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 via-blue-500/10 to-purple-500/10"></div>
-        <div className="relative max-w-5xl mx-auto">
-          <div className="flex items-center justify-center gap-6 mb-6">
-            <img
-              src="/tanstack-circle-logo.png"
-              alt="TanStack Logo"
-              className="w-24 h-24 md:w-32 md:h-32"
-            />
-            <h1 className="text-6xl md:text-7xl font-black text-white [letter-spacing:-0.08em]">
-              <span className="text-gray-300">TANSTACK</span>{' '}
-              <span className="bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
-                START
-              </span>
-            </h1>
-          </div>
-          <p className="text-2xl md:text-3xl text-gray-300 mb-4 font-light">
-            The framework for next generation AI applications
-          </p>
-          <p className="text-lg text-gray-400 max-w-3xl mx-auto mb-8">
-            Full-stack framework powered by TanStack Router for React and Solid.
-            Build modern applications with server functions, streaming, and type
-            safety.
-          </p>
-          <div className="flex flex-col items-center gap-4">
-            <a
-              href="https://tanstack.com/start"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-8 py-3 bg-cyan-500 hover:bg-cyan-600 text-white font-semibold rounded-lg transition-colors shadow-lg shadow-cyan-500/50"
-            >
-              Documentation
-            </a>
-            <p className="text-gray-400 text-sm mt-2">
-              Begin your TanStack Start journey by editing{' '}
-              <code className="px-2 py-1 bg-slate-700 rounded text-cyan-400">
-                /src/routes/index.tsx
-              </code>
-            </p>
+    <MainLayout>
+      <div className="space-y-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight">仪表板</h1>
+            <p className="text-muted-foreground">查看您的业务概览和关键指标</p>
           </div>
         </div>
-      </section>
 
-      <section className="py-16 px-6 max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {features.map((feature, index) => (
-            <div
-              key={index}
-              className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl p-6 hover:border-cyan-500/50 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/10"
-            >
-              <div className="mb-4">{feature.icon}</div>
-              <h3 className="text-xl font-semibold text-white mb-3">
-                {feature.title}
-              </h3>
-              <p className="text-gray-400 leading-relaxed">
-                {feature.description}
-              </p>
-            </div>
+        {/* 统计卡片 */}
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          {stats.map((stat, index) => (
+            <Card key={index}>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">{stat.title}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{stat.value}</div>
+                <p className="text-xs text-muted-foreground">
+                  <span className={stat.trend === "up" ? "text-green-600" : "text-red-600"}>
+                    {stat.change}
+                  </span>
+                  {" "}较上月
+                </p>
+              </CardContent>
+            </Card>
           ))}
         </div>
-      </section>
-    </div>
+
+        {/* 图表区域 */}
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+          <Card className="col-span-4">
+            <CardHeader>
+              <CardTitle>收入趋势</CardTitle>
+              <CardDescription>过去7个月的收入变化</CardDescription>
+            </CardHeader>
+            <CardContent className="pl-2">
+              <ResponsiveContainer width="100%" height={350}>
+                <LineChart data={revenueData}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="month" />
+                  <YAxis />
+                  <Tooltip />
+                  <Line type="monotone" dataKey="revenue" stroke="#8884d8" strokeWidth={2} />
+                </LineChart>
+              </ResponsiveContainer>
+            </CardContent>
+          </Card>
+
+          <Card className="col-span-3">
+            <CardHeader>
+              <CardTitle>用户增长</CardTitle>
+              <CardDescription>过去7个月的用户增长</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <ResponsiveContainer width="100%" height={350}>
+                <BarChart data={revenueData}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="month" />
+                  <YAxis />
+                  <Tooltip />
+                  <Bar dataKey="users" fill="#82ca9d" />
+                </BarChart>
+              </ResponsiveContainer>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* 最近交易表格 */}
+        <Card>
+          <CardHeader>
+            <CardTitle>最近交易</CardTitle>
+            <CardDescription>最新的订单交易记录</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>客户</TableHead>
+                  <TableHead>邮箱</TableHead>
+                  <TableHead>金额</TableHead>
+                  <TableHead>状态</TableHead>
+                  <TableHead>日期</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {recentTransactions.map((transaction) => (
+                  <TableRow key={transaction.id}>
+                    <TableCell className="font-medium">
+                      <div className="flex items-center gap-2">
+                        <Avatar className="h-8 w-8">
+                          <AvatarImage src={`https://avatar.vercel.sh/${transaction.customer}`} />
+                          <AvatarFallback>{transaction.customer.slice(0, 2)}</AvatarFallback>
+                        </Avatar>
+                        {transaction.customer}
+                      </div>
+                    </TableCell>
+                    <TableCell>{transaction.email}</TableCell>
+                    <TableCell>{transaction.amount}</TableCell>
+                    <TableCell>
+                      <Badge
+                        variant={
+                          transaction.status === "已完成" ? "default" :
+                          transaction.status === "处理中" ? "secondary" : "destructive"
+                        }
+                      >
+                        {transaction.status}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>{transaction.date}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
+
+        {/* 进度和目标 */}
+        <div className="grid gap-4 md:grid-cols-2">
+          <Card>
+            <CardHeader>
+              <CardTitle>月度目标</CardTitle>
+              <CardDescription>当前月份的KPI完成情况</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <div className="flex items-center justify-between text-sm">
+                  <span>销售目标</span>
+                  <span>75%</span>
+                </div>
+                <Progress value={75} />
+              </div>
+              <div className="space-y-2">
+                <div className="flex items-center justify-between text-sm">
+                  <span>用户增长</span>
+                  <span>60%</span>
+                </div>
+                <Progress value={60} />
+              </div>
+              <div className="space-y-2">
+                <div className="flex items-center justify-between text-sm">
+                  <span>客户满意度</span>
+                  <span>92%</span>
+                </div>
+                <Progress value={92} />
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>团队表现</CardTitle>
+              <CardDescription>团队成员的工作效率</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex items-center space-x-4">
+                <Avatar>
+                  <AvatarImage src="https://avatar.vercel.sh/user1" />
+                  <AvatarFallback>A1</AvatarFallback>
+                </Avatar>
+                <div className="flex-1 space-y-1">
+                  <p className="text-sm font-medium leading-none">张明</p>
+                  <p className="text-sm text-muted-foreground">完成率: 95%</p>
+                </div>
+                <Progress value={95} className="w-20" />
+              </div>
+              <Separator />
+              <div className="flex items-center space-x-4">
+                <Avatar>
+                  <AvatarImage src="https://avatar.vercel.sh/user2" />
+                  <AvatarFallback>A2</AvatarFallback>
+                </Avatar>
+                <div className="flex-1 space-y-1">
+                  <p className="text-sm font-medium leading-none">李华</p>
+                  <p className="text-sm text-muted-foreground">完成率: 88%</p>
+                </div>
+                <Progress value={88} className="w-20" />
+              </div>
+              <Separator />
+              <div className="flex items-center space-x-4">
+                <Avatar>
+                  <AvatarImage src="https://avatar.vercel.sh/user3" />
+                  <AvatarFallback>A3</AvatarFallback>
+                </Avatar>
+                <div className="flex-1 space-y-1">
+                  <p className="text-sm font-medium leading-none">王芳</p>
+                  <p className="text-sm text-muted-foreground">完成率: 92%</p>
+                </div>
+                <Progress value={92} className="w-20" />
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    </MainLayout>
   )
 }
